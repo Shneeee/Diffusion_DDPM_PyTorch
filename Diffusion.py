@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 def extract(v, t, x_shape):
   '''
   v: Value corresponding to each timestep
@@ -13,6 +14,7 @@ def extract(v, t, x_shape):
   v = v.to(t.device)
   out = torch.gather(v, index=t, dim=0).float()
   return out.view([t.shape[0]] + [1] * (len(x_shape) - 1)).to(t.device)
+
 
 class GaussianDiffusionTrainer(nn.Module):
   def __init__(self, model, beta_1, beta_T, T):
@@ -44,6 +46,7 @@ class GaussianDiffusionTrainer(nn.Module):
     loss = F.mse_loss(self.model(x_t, t), noise, reduction='mean')
     return t, noise, x_t, loss
   
+
 class GaussianDiffusionSampler(nn.Module):
   def __init__(self, model, beta_1, beta_T, T, img_size=32, mean_type='eps', var_type='fixedlarge'):
     super().__init__()
